@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="HaCycle">
+        <attr name="view_height" format="dimension" />
+        <attr name="index_size" format="dimension" />
+        <attr name="index_gravity">
+            <flag name="left" value="0" />
+            <flag name="centre" value="1" />
+            <flag name="right" value="2" />
+        </attr>
+    </declare-styleable>
+
+</resources>

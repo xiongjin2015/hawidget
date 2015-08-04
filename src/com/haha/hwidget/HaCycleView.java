@@ -237,7 +237,6 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener,
      */
     public void init(List<T> items, OnItemLoadingView<T> loadingView, ViewGroup conflictingView,
             boolean startAutoScroll) {
-        Log.i(TAG, "init");
         mCycleAdapter = new HaCycleAdapter<T>(items, loadingView);
         mSlideDataHome.setAdapter(mCycleAdapter);
         resetSlideIndex();
@@ -495,19 +494,15 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener,
 
         @Override
         public int getCount() {
-            Log.i(TAG, "getCount()");
             return Integer.MAX_VALUE;
         }
 
         public int getRealCount() {
-            Log.i(TAG, "getRealCount():" + super.getCount());
             return super.getCount();
         }
 
         @Override
         public T getItem(int position) {
-            Log.i(TAG, "getItem:" + position);
-            Log.i(TAG, "getRealCount:" + getRealCount());
             int realCount = getRealCount();
             if (realCount <= 0)
                 return null;

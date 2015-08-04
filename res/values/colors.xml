@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="background_section_mark">#f86400</color>
+    <color name="textcolor_section_more">#999999</color>
+    <color name="textcolor_section_more_press">#ff8800</color>
+
+</resources>

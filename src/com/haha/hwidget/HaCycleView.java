@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,16 +33,19 @@ import com.haha.hwidget.util.HaScreen;
  * @author xj
  */
 @SuppressLint("ClickableViewAccessibility")
-public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, OnItemSelectedListener,View.OnTouchListener{
-    
-    /*auto scroll message's what*/
-    private final static int AUTO_SCROLL = 100; //标识自动滚动消息的ID
-    
-    /*time of auto scroll*/
-    private final static int AUTO_SCROLL_TIME = 3 * 1000; //自动滚动间隔时间
-    
-    //overtime cardinal number
-    private final static int OVERTIME_CARDINAL_NUMBER = 2; //延迟基数
+public class HaCycleView<T> extends FrameLayout implements OnItemClickListener,
+        OnItemSelectedListener, View.OnTouchListener {
+
+    private final static String TAG = "HaCycleView";
+
+    /* auto scroll message's what */
+    private final static int AUTO_SCROLL = 100; // 标识自动滚动消息的ID
+
+    /* time of auto scroll */
+    private final static int AUTO_SCROLL_TIME = 3 * 1000; // 自动滚动间隔时间
+
+    // overtime cardinal number
+    private final static int OVERTIME_CARDINAL_NUMBER = 2; // 延迟基数
 
     private HaExclusiveEventGallery mSlideDataHome;
     private RadioGroup mSlideIndex;
@@ -52,9 +56,8 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
 
     /* 底部标识小圆点的大小 */
     private int mSlideIndexBtnSize;
-    
+
     private HaCycleAdapter<T> mCycleAdapter;
-   
 
     public HaCycleView(Context context) {
         super(context);
@@ -221,11 +224,12 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
      *      startAutoScroll)
      */
     public void init(List<T> items, OnItemLoadingView<T> loadingView, ViewGroup conflictingView) {
-        init(items,loadingView,conflictingView,false);
+        init(items, loadingView, conflictingView, false);
     }
 
     /**
      * 初始化HaCycleView的数据&绘制界面
+     * 
      * @param items:数据源列表
      * @param loadingView:interface of loading module view
      * @param conflictingView:设置事件冲突的控件，滑动事件冲突
@@ -233,6 +237,7 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
      */
     public void init(List<T> items, OnItemLoadingView<T> loadingView, ViewGroup conflictingView,
             boolean startAutoScroll) {
+        Log.i(TAG, "init");
         mCycleAdapter = new HaCycleAdapter<T>(items, loadingView);
         mSlideDataHome.setAdapter(mCycleAdapter);
         resetSlideIndex();
@@ -240,17 +245,18 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
         if (startAutoScroll)
             startAutoScroll();
     }
-    
+
     /**
      * 设置事件冲突的控件:滑动事件冲突
+     * 
      * @param conflictingView
      */
     public void setConflictingView(ViewGroup conflictingView) {
         mSlideDataHome.setConflictingView(conflictingView);
     }
+
     /**
-     * 设置底部的数据索引view
-     * 根据items的条数，动态向RadioGroup里添加RadioButton
+     * 设置底部的数据索引view 根据items的条数，动态向RadioGroup里添加RadioButton
      */
     private void resetSlideIndex() {
         final int itemCount = mCycleAdapter.getRealCount();
@@ -268,9 +274,10 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
         }
         showFirstItem();
     }
-    
+
     /**
      * show first item of mSlideDataHome<Gallery>
+     * 
      * @param count : size of FSCycleView's data items
      */
     private void showFirstItem() {
@@ -282,8 +289,8 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
         final int start = middle - remainder;
         mSlideDataHome.setSelection(start);
     }
-    
-    public void onDestory(){
+
+    public void onDestory() {
         try {
             stopAutoScroll();
             mSlideDataHome.setAdapter(null);
@@ -292,46 +299,46 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
         } catch (Exception e) {
         }
     }
-    
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (v == mSlideDataHome) {
             switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                stopAutoScroll();
-                break;
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-                startAutoScroll();
-                break;
-            default:
-                break;
+                case MotionEvent.ACTION_DOWN:
+                    stopAutoScroll();
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    startAutoScroll();
+                    break;
+                default:
+                    break;
             }
         }
         return false;
     }
-    
+
     /**
      * start auto scroll data view
+     * 
      * @return true : start auto scroll success , false : start auto scroll failure
      */
     public boolean startAutoScroll() {
         return sendAutoScrollMsg(true);
     }
-    
+
     /**
      * stop auto scroll data view
      */
-    public void stopAutoScroll(){
+    public void stopAutoScroll() {
         removeAutoScrollMsg();
     }
-    
-    private void removeAutoScrollMsg(){
+
+    private void removeAutoScrollMsg() {
         mHandler.removeMessages(AUTO_SCROLL);
     }
-    
+
     /**
-     * 
      * @param overtime 是否延迟：当触发了手动滑动，触发延迟，展示时间将长点：扩大一倍；
      * @return
      */
@@ -343,23 +350,23 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
             time = OVERTIME_CARDINAL_NUMBER * time;
         return mHandler.sendEmptyMessageDelayed(AUTO_SCROLL, time);
     }
-    
-    private Handler mHandler = new Handler(){
+
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-            case AUTO_SCROLL:
-                sendAutoScrollMsg(false);
-                try {
-                    mSlideDataHome.setSoundEffectsEnabled(false);
-                    mSlideDataHome.onKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT, null);
-                } catch (Exception e) {
-                }
-                break;
+                case AUTO_SCROLL:
+                    sendAutoScrollMsg(false);
+                    try {
+                        mSlideDataHome.setSoundEffectsEnabled(false);
+                        mSlideDataHome.onKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT, null);
+                    } catch (Exception e) {
+                    }
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
             }
         }
     };
@@ -368,22 +375,22 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (mOnCycleItemClickListener == null)
             return;
-    
+
         try {
-            T entity = mCycleAdapter.getItem(position); //等价于 T entity = (T) parent.getAdapter().getItem(position);
+            T entity = mCycleAdapter.getItem(position); // 等价于 T entity = (T)
+                                                        // parent.getAdapter().getItem(position);
             int pos = getPosition(position);
             mOnCycleItemClickListener.onItemClick(entity, pos);
         } catch (Exception e) {
         }
     }
-    
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         rereshSlideIndex(position);
         onItemSelected(position);
     }
-    
+
     private void onItemSelected(int position) {
         if (mOnCycleItemSelectedListener == null)
             return;
@@ -392,14 +399,14 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
             position = getPosition(position);
             mOnCycleItemSelectedListener.onItemSelected(mCycleAdapter.getItem(position), position);
         } catch (Exception e) {
-            //Log.e(TAG, "onItemSelected", e);
+            // Log.e(TAG, "onItemSelected", e);
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
-    
+
     private int getPosition(int position) throws Exception {
         final int count = mCycleAdapter.getRealCount();
         if (count <= 0)
@@ -407,16 +414,17 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
         position = position % count;
         return position;
     }
-    
+
     /**
      * refresh slideindex
+     * 
      * @param position: position of HaCycleView's data items
      */
     private void rereshSlideIndex(int position) {
         try {
             position = getPosition(position);
         } catch (Exception e) {
-            //Log.e(TAG, "rereshSlideIndex", e);
+            // Log.e(TAG, "rereshSlideIndex", e);
             return;
         }
 
@@ -448,11 +456,10 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
     public void setOnItemClickListener(OnCycleItemClickListener<T> listener) {
         mOnCycleItemClickListener = listener;
     }
-    
-    public void setOnItemSelectedListener(OnCycleItemSelectedListener<T> listener){
+
+    public void setOnItemSelectedListener(OnCycleItemSelectedListener<T> listener) {
         mOnCycleItemSelectedListener = listener;
     }
-    
 
     /**
      * Interface definition for a callback to be invoked when an item in this AdapterView has been
@@ -471,16 +478,16 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
          */
         public void onItemClick(T t, int position);
     }
-    
+
     /**
-     * Interface definition for a callback to be invoked when
-     * an item in this view has been selected.
+     * Interface definition for a callback to be invoked when an item in this view has been
+     * selected.
      */
-    public static interface OnCycleItemSelectedListener<T>{
+    public static interface OnCycleItemSelectedListener<T> {
         public void onItemSelected(T entity, int position);
     }
-    
-    private static class HaCycleAdapter<T> extends HaBaseAdapter<T>{
+
+    private static class HaCycleAdapter<T> extends HaBaseAdapter<T> {
 
         public HaCycleAdapter(List<T> item, OnItemLoadingView<T> loadingView) {
             super(item, loadingView);
@@ -488,15 +495,19 @@ public class HaCycleView<T> extends FrameLayout implements OnItemClickListener, 
 
         @Override
         public int getCount() {
+            Log.i(TAG, "getCount()");
             return Integer.MAX_VALUE;
         }
 
-        public int getRealCount(){
+        public int getRealCount() {
+            Log.i(TAG, "getRealCount():" + super.getCount());
             return super.getCount();
         }
 
         @Override
         public T getItem(int position) {
+            Log.i(TAG, "getItem:" + position);
+            Log.i(TAG, "getRealCount:" + getRealCount());
             int realCount = getRealCount();
             if (realCount <= 0)
                 return null;

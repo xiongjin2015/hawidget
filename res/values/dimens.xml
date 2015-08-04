@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="section_margin">4dip</dimen>
+    <dimen name="section_padding">14dip</dimen>
+    <dimen name="section_item_spacing">10dip</dimen>
+</resources>

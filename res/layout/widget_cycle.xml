@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="160dip" >
 
-    <com.haha.hwidget.widget.HaExclusiveEventGallery
+    <com.haha.hwidget.HaExclusiveEventGallery
         android:id="@+id/cycle_gallery"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

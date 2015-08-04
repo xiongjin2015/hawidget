@@ -1,26 +1,27 @@
+
 package com.haha.hwidget.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 /**
  * 适配器基类
+ * 
  * @author xj
- *
  * @param <T>
  */
 public class HaBaseAdapter<T> extends BaseAdapter implements HaRefreshAdapterCallBack<T> {
-    
+
     private final int ADD_END = -1;
     private OnItemLoadingView<T> mLoadingItemView;
     protected List<T> mItems;
 
     public HaBaseAdapter(List<T> items, OnItemLoadingView<T> loadingView) {
-        this.setItems(items);
+        this.mItems = items;
         this.mLoadingItemView = loadingView;
     }
 
@@ -142,9 +143,6 @@ public class HaBaseAdapter<T> extends BaseAdapter implements HaRefreshAdapterCal
     private void setItems(List<T> list) {
         if (this.mItems != list)
             this.mItems = list;
-
-        if (this.mItems == null)
-            this.mItems = new ArrayList<T>();
     }
 
     @Override
@@ -155,11 +153,13 @@ public class HaBaseAdapter<T> extends BaseAdapter implements HaRefreshAdapterCal
 
     @Override
     public int getCount() {
+        Log.i("HaBaseAdapter", "getCount()");
         return this.mItems.size();
     }
 
     @Override
     public T getItem(int position) {
+        Log.i("HaBaseAdapter", "getItem");
         return this.mItems.get(position);
     }
 
@@ -170,6 +170,7 @@ public class HaBaseAdapter<T> extends BaseAdapter implements HaRefreshAdapterCal
 
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
+        Log.i("HaBaseAdapter", "getView:");
         return this.mLoadingItemView.getView(convertView, getItem(position));
     }
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/section_base"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/section_margin"
+    android:layout_marginRight="@dimen/section_margin"
+    android:background="@drawable/background_section"
+    android:gravity="top|left"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/section_padding"
+    android:paddingRight="@dimen/section_padding" >
+
+    <RelativeLayout
+        android:id="@+id/section_head_home"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dip"
+        android:layout_marginTop="12dip" >
+
+        <TextView
+            android:id="@+id/section_head_mark"
+            android:layout_width="4dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@color/background_section_mark" />
+
+        <TextView
+            android:id="@+id/section_head_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6dip"
+            android:layout_toRightOf="@id/section_head_mark"
+            android:gravity="center_vertical"
+            android:text="@string/title"
+            android:textColor="#4D4D4D"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/section_head_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:drawableRight="@drawable/ic_more"
+            android:gravity="center_vertical"
+            android:text="@string/more"
+            android:textColor="@drawable/textcolor_section_more"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="10dip"
+        android:background="#e5e5e5" />
+
+    <com.haha.hwidget.HaGridView
+        android:id="@+id/section_gridView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:drawSelectorOnTop="false"
+        android:fadingEdge="none"
+        android:gravity="center"
+        android:horizontalSpacing="@dimen/section_item_spacing"
+        android:listSelector="#00000000"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/section_item_spacing" />
+
+</LinearLayout>
